@@ -1,0 +1,51 @@
+:root {
+	font-size:12px;
+}
+
+* {
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+}
+
+body {
+	font-family: 'Raleway', sans-serif;
+}
+
+.page-container {
+	max-width: 900px;
+/*	background:#15141f;*/
+	margin:0 auto;
+	display:flex;
+	gap:20px;
+	flex-direction: column;
+	align-items:center;
+}
+
+.board {
+	background: #14151f;
+	display:grid;
+	gap:5px;
+	grid-template-columns: repeat(3, 80px);
+	grid-template-rows: repeat(3, 80px);
+}
+
+.board div {
+	background:white;
+} 
+
+.board div:hover {
+	cursor:pointer;
+}
+
+
+h3 {
+	font-size:3rem;
+	padding:20px;
+}
+
+button {
+	width:200px;
+	padding:12px;
+	font-size:1.2rem;
+}
