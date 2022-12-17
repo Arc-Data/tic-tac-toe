@@ -32,6 +32,10 @@ body {
 
 .board div {
 	background:white;
+	display:grid;
+	place-items:center;
+	font-size:3rem;
+	font-weight:700;
 } 
 
 .board div:hover {
@@ -41,6 +45,7 @@ body {
 
 h3 {
 	font-size:3rem;
+	font-weight: 500;
 	padding:20px;
 }
 
