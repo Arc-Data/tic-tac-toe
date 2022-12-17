@@ -13,18 +13,31 @@ const gameBoard = (() => {
 		[2, 4, 6],
 	];
 
-	const getStatus = () => hasWinner;
+	const getBoard = () => board;
 
-	const checkGameStatus = (player) => {
-		console.log(player.moves);
+	const checkGameStatus = () => hasWinner;
+
+	const checkWinner = (moves) => {
+		hasWinner = winConditions.some(condition => {
+			return moves.every(index => condition.includes(index));
+		});
+
+		if(hasWinner) {
+			console.log("Huh?");
+		}
 	};
 
-	const resetBoard = () => {
-		board.forEach((item, idx) => board[idx] = '');
-	};
+	// const resetBoard = () => {
+	// 	board.forEach((item, idx) => board[idx] = '');
+	// 	displayController.render();
+
+	// 	hasWinner = false;
+	// };
 
 	return {
+		getBoard,
 		resetBoard,
+		checkWinner,
 		checkGameStatus,
 	};
 
@@ -45,6 +58,16 @@ const displayController = (() => {
 
 	initialize();
 
+	const render = () => {
+		const board = gameBoard.getBoard();
+		cells.forEach((cell, idx) => {
+			cell.textContent = board[idx];
+		});
+	};
+
+	return {
+		render,
+	};
 
 })();
 
@@ -58,19 +81,35 @@ const player = (() => {
 	};
 	const player1 = Person('Player 1', 'X', []);
 	const player2 = Person('Player 2', 'O', []);
-
+	let turn = 1;
 	let turnPlayer = player1;
+
+	const resetMoves = () => {
+		player1.moves = [];
+		player2.moves = [];
+	};
 
 	const nextPlayer = () => {
 		turnPlayer = turnPlayer === player1 ? player2 : player1;
 	};
 
 	const setValue = (cell) => {
-		cell.textContent = turnPlayer.mark;
+		if(cell.textContent !== '' || gameBoard.checkGameStatus()) return;
+		
+		gameBoard.getBoard()[Number(cell.dataset.index)] = turnPlayer.mark;
 		turnPlayer.moves.push(Number(cell.dataset.index));
-		gameBoard.checkGameStatus(turnPlayer);
+		displayController.render();
+		
+		if(turn >= 5) {
+			gameBoard.checkWinner(turnPlayer.moves);
+		}
+
 		nextPlayer();
+		turn++;
+		
 	};
+
+	
 
 
 	return {
