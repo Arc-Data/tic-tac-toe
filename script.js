@@ -5,7 +5,6 @@ const Player = (name, mark) => {
 	};
 };
 
-
 const gameBoard = (() => {
 	const board = Array.from(9).fill('');
 	const p1moves = [];
@@ -17,17 +16,20 @@ const gameBoard = (() => {
 
 	const getBoard = () => board;
 
-	const setCell = (idx, player) => {
-		board[idx] = game.getTurnPlayer().mark;
+	const setCell = (idx, value) => {
+		if (board[idx]) return;
+		board[idx] = value;
 		displayController.render();
 		game.nextPlayer();
 	};
 
-
 	const resetBoard = () => {
-		board.forEach(i => '');
-	};
+		console.log(board);
+		board.forEach((i, idx) => board[idx] = '');
+		console.log(board);
 
+		displayController.render();
+	};
 
 	return {
 		setCell,
@@ -37,8 +39,6 @@ const gameBoard = (() => {
 	};
 
 })();
-
-
 
 const game = (() => {
 	const player1 = Player('Player 1', 'X');
@@ -65,14 +65,17 @@ const game = (() => {
 
 const displayController = (() => {
 	const divs = document.querySelectorAll('.board > div');
+	const resetButton = document.querySelector('.btn');
+
+	resetButton.addEventListener('click', gameBoard.resetBoard);
 
 	const initialize = () => {
 		divs.forEach((div, idx) => {
 			div.dataset.index = idx;
-			div.addEventListener('click', () => gameBoard.setCell(div.dataset.index));
+			div.addEventListener('click', () => gameBoard.setCell(div.dataset.index, game.getTurnPlayer().mark));
 		}); 	
 	};
-	
+
 
 	const render = () => {
 		const board = gameBoard.getBoard();
@@ -82,12 +85,9 @@ const displayController = (() => {
 	initialize();
 
 	return {
-		render
+		render,
 	};
 })();
-
-
-
 
 
 /*
