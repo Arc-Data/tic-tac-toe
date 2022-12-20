@@ -18,7 +18,13 @@ const gameBoard = (() => {
 	const checkGameStatus = () => hasWinner;
 
 	const checkWinner = (moves) => {
+		if(moves.length < 3) return; 
 
+		// at least one wincondition has to be satisfied
+		hasWinner = winConditions.some( winCon => {
+			// and the winCon array should be a subset of the player moves
+			return winCon.every(index => moves.includes(index));
+		});
 
 		return hasWinner;
 	};
@@ -38,7 +44,6 @@ const gameBoard = (() => {
 		checkWinner,
 		checkGameStatus,
 	};
-
 })();
 
 const player = (() => {
@@ -90,20 +95,16 @@ const player = (() => {
 
 		nextPlayer();
 		displayController.turnSubtitle(turnPlayer.name);
-		
 	};
 
 	const getTurnPlayerName = () => turnPlayer.name;
 	
-
-
 	return {
 		getTurnPlayerName,
 		resetGameState,
 		setValue,
 		showPlayerMoves,
 	};
-
 })();
 
 const displayController = (() => {
@@ -144,6 +145,4 @@ const displayController = (() => {
 		winSubtitle,
 		render,
 	};
-
 })();
-
