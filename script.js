@@ -18,13 +18,9 @@ const gameBoard = (() => {
 	const checkGameStatus = () => hasWinner;
 
 	const checkWinner = (moves) => {
-		// at least one wincondition has to be satisfied
-
 		hasWinner = winConditions.some( winCon => {
-			// and the winCon array should be a subset of the player moves
 			return winCon.every(index => moves.includes(index));
 		});
-
 		return hasWinner;
 	};
 
