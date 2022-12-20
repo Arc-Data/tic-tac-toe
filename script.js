@@ -18,9 +18,8 @@ const gameBoard = (() => {
 	const checkGameStatus = () => hasWinner;
 
 	const checkWinner = (moves) => {
-		if(moves.length < 3) return; 
-
 		// at least one wincondition has to be satisfied
+
 		hasWinner = winConditions.some( winCon => {
 			// and the winCon array should be a subset of the player moves
 			return winCon.every(index => moves.includes(index));
@@ -79,11 +78,10 @@ const player = (() => {
 	};
 
 	const setValue = (cell) => {
-		if(cell.textContent !== '' || gameBoard.checkGameStatus()) return;
+		if(cell.textContent !== '' || gameBoard.checkGameStatus() || turn == 10) return;
 		gameBoard.getBoard()[Number(cell.dataset.index)] = turnPlayer.mark;
 		turnPlayer.moves.push(Number(cell.dataset.index));
 		displayController.render();
-		console.log(turn, turnPlayer.moves);
 		turn++;
 
 		if(turn >= 5) {
@@ -93,9 +91,16 @@ const player = (() => {
 			}
 		}	
 
+		if(turn == 10) {
+			displayController.tieSubtitle();
+			return;
+		}
+
 		nextPlayer();
 		displayController.turnSubtitle(turnPlayer.name);
 	};
+
+	const getTurnNumber = () => turn;
 
 	const getTurnPlayerName = () => turnPlayer.name;
 	
@@ -104,6 +109,7 @@ const player = (() => {
 		resetGameState,
 		setValue,
 		showPlayerMoves,
+		getTurnNumber,
 	};
 })();
 
@@ -121,6 +127,11 @@ const displayController = (() => {
 		});
 
 		turnSubtitle(player.getTurnPlayerName());
+	};
+
+	const tieSubtitle = () => {
+		console.log("huh?");
+		subtitle.textContent = `It's a draw!`;
 	};
 
 	const winSubtitle = name => {
@@ -141,6 +152,7 @@ const displayController = (() => {
 	initialize();
 
 	return {
+		tieSubtitle,
 		turnSubtitle,
 		winSubtitle,
 		render,
