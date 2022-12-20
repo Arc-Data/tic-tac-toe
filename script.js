@@ -100,7 +100,17 @@ const player = (() => {
 
 	const getTurnPlayerName = () => turnPlayer.name;
 	
+	const setP1Name = name => {
+		player1.name = name || 'Player 1';
+	};
+
+	const setP2Name = name => {
+		player2.name = name || 'Player 2';
+	};
+
 	return {
+		setP1Name,
+		setP2Name,
 		getTurnPlayerName,
 		resetGameState,
 		setValue,
@@ -112,9 +122,27 @@ const player = (() => {
 const displayController = (() => {
 	const subtitle = document.querySelector('#subtitle');
 	const cells = document.querySelectorAll('.board > div');
-	const resetButton = document.querySelector('.btn');
+	const resetButton = document.querySelector('.reset-btn');
+	const saveButton = document.querySelector('#save-btn');
+	const settingsButton = document.querySelector('#settings-btn');
+	const closeButton = document.querySelector('#close-btn');
+  	const overlay = document.querySelector('.overlay');
 
-	resetButton.addEventListener('click', gameBoard.resetBoard);
+	const form = document.querySelector("form");
+
+
+
+	const openForm = () => {
+		console.log("Open trigger");
+		form.classList.add('active');
+		overlay.classList.add('active');
+	};
+
+	const closeForm = () => {
+		console.log("Close trigger");
+		form.classList.remove('active');
+		overlay.classList.remove('active');
+	};
 
 	const initialize = () => {
 		cells.forEach((cell, idx) => {
@@ -144,6 +172,28 @@ const displayController = (() => {
 			cell.textContent = board[idx];
 		});
 	};
+
+	settingsButton.addEventListener('click', openForm);
+	
+	overlay.addEventListener('click', closeForm);
+	resetButton.addEventListener('click', gameBoard.resetBoard);
+	
+	saveButton.addEventListener('click', () => {
+		event.preventDefault();
+		const name1 = document.querySelector('#player1Name');
+		const name2 = document.querySelector('#player2Name');
+
+		player.setP1Name(name1.value);
+		player.setP2Name(name2.value);
+
+		gameBoard.resetBoard();
+		closeForm();
+	});
+	
+	closeButton.addEventListener('click', (e) => {
+		event.preventDefault();
+		closeForm();
+	});
 
 	initialize();
 
