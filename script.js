@@ -130,8 +130,6 @@ const displayController = (() => {
 
 	const form = document.querySelector("form");
 
-
-
 	const openForm = () => {
 		console.log("Open trigger");
 		form.classList.add('active');
